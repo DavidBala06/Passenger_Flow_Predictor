@@ -3,6 +3,7 @@ import mlflow
 import numpy as np
 import mlflow.sklearn
 import mlflow.xgboost
+import joblib
 
 #models
 from sklearn.linear_model import LogisticRegression
@@ -41,4 +42,49 @@ def run_training_pipeline():
     
     
     # Mlflow Tracking
+    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    mlflow.set_experiment("Passenger Flow Prediction")
     
+    #1 Logistic Regression
+    with mlflow.start_run(run_name = "Logistic Regression"):
+        print("\n Training Logistic Regression Classifier...")
+        log_reg = LogisticRegression(class_weight = "balanced")
+        log_reg.fit(X_train, y_clf_train)
+        
+        preds_class = log_reg.predict(X_test)
+        acc = accuracy_score(y_clf_test, preds_class)
+        prec = precision_score(y_clf_test, preds_class, zero_division = 0)
+        
+        mlflow.log_param("model_type", "Logistic Regression")
+        mlflow.log_metric("accuracy", acc)
+        mlflow.log_metric("precision", prec)
+        mlflow.sklearn.log_model(log_reg, "logistic regression model")
+        
+        print(f" Baseline Accuracy: {acc*100:.1f}%")
+        print(f" Baseline Precision: {prec*100:.1f}%")
+        
+    #2 XGBoost Regression
+    with mlflow.start_run(run_name = "XGBoost Regression"):
+        print("\n Training XGBoost Regressor...")
+        
+        xgb_model = xgb.XGBRegressor(
+            n_estimators = 150,
+            learning_rate = 0.05,
+            max_depth = 4,
+            random_state = 42
+        )
+        xgb_model.fit(X_train, y_reg_train)
+        preds_reg = xgb_model.predict(X_test)
+        mae = mean_absolute_error(y_reg_test, preds_reg)
+        
+        mlflow.log_param("model type", "XGBoost")
+        mlflow.log_param("n_estimators", 150)
+        mlflow.log_metric("MAE", mae)
+        mlflow.xgboost.log_model(xgb_model, "xgboost regression model")
+        
+        print(f" XGBoost MAE: {mae:.2f} passengers / 15m")
+        
+        #Save the best model
+        os.makedirs("../models", exist_ok = True)
+        joblib.dump(xgb_model, "../models/best_model.pkl")
+        print(" Model saved to models/best_model.pkl")
