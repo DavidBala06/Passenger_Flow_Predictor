@@ -56,8 +56,8 @@ def run_training_pipeline():
         prec = precision_score(y_clf_test, preds_class, zero_division = 0)
         
         mlflow.log_param("model_type", "Logistic Regression")
-        mlflow.log_metric("accuracy", acc)
-        mlflow.log_metric("precision", prec)
+        mlflow.log_metric("accuracy", float(acc))
+        mlflow.log_metric("precision", float(prec))
         mlflow.sklearn.log_model(log_reg, "logistic regression model")
         
         print(f" Baseline Accuracy: {acc*100:.1f}%")
@@ -79,7 +79,7 @@ def run_training_pipeline():
         
         mlflow.log_param("model type", "XGBoost")
         mlflow.log_param("n_estimators", 150)
-        mlflow.log_metric("MAE", mae)
+        mlflow.log_metric("MAE", float(mae))
         mlflow.xgboost.log_model(xgb_model, "xgboost regression model")
         
         print(f" XGBoost MAE: {mae:.2f} passengers / 15m")
@@ -88,3 +88,6 @@ def run_training_pipeline():
         os.makedirs("../models", exist_ok = True)
         joblib.dump(xgb_model, "../models/best_model.pkl")
         print(" Model saved to models/best_model.pkl")
+if __name__ == "__main__":
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    run_training_pipeline()
