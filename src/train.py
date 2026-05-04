@@ -29,7 +29,7 @@ def run_training_pipeline():
     y_clf = (df["target_flow"] >= congestion_threshold).astype(int)
     
     #features
-    features = ["upcoming_flight_capacity", "hour of day", "day_of_week"]
+    features = ["upcoming_flight_capacity", "hour_of_day", "day_of_week"]
     X = df[features]
     
     # Split the data 
