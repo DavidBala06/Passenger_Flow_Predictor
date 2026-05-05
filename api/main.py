@@ -36,6 +36,14 @@ class PredictionRequest(BaseModel):
     current_passenger_flow: int = 0
     staff_availability: int = 0
     
+#Define an endpoint for nice visualization
+@app.get("/")
+def read_root():
+    return {
+        "status": "online",
+        "message": "Welcome to the Passenger Flow Predictor API. Use the /predict endpoint to get wait time predictions and lane recommendations.",
+    }
+    
 @app.post("/predict")
 def predict_flow(request: PredictionRequest):
     if model is None:
