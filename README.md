@@ -53,9 +53,7 @@ project/
 ├── src/
 │   ├── ingestion.py       # Data ingestion & validation
 │   ├── features.py        # Feature engineering pipeline
-│   ├── train.py           # Model training
-│   ├── evaluate.py        # Model evaluation
-│   ├── predict.py         # Inference logic
+│   ├── train.py           # Model training   
 │
 ├── api/
 │   └── main.py            # FastAPI app
