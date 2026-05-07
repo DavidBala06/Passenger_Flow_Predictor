@@ -110,7 +110,7 @@ def run_training_pipeline():
         
         print(f" Tuned XGBoost MAE: Off by {mae:.2f} passengers per 15-min")
 
-        # 8. Save the absolute best model
+        # Save the absolute best model
         os.makedirs("../models", exist_ok=True)
         joblib.dump(best_xgb, "../models/best_model.pkl")
         print(" Best model saved to models/best_model.pkl")

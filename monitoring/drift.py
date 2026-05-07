@@ -37,3 +37,6 @@ def run_automated_check():
     
     # 4. Compare them!
     check_feature_drift(baseline, recent_live_data)
+
+if __name__ == "__main__":
+    run_automated_check()
