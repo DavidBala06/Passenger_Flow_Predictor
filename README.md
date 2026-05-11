@@ -27,7 +27,6 @@ It is designed as a **production-ready end-to-end MLOps system**, not just a mac
 * 📊 Model comparison (baseline vs optimized)
 * 🧪 Experiment tracking with MLflow
 * 🚀 REST API for real-time predictions
-* 🐳 Dockerized deployment
 * 📜 Logging for traceability
 * 📉 Basic drift detection for monitoring
 
@@ -53,7 +52,7 @@ project/
 ├── src/
 │   ├── ingestion.py       # Data ingestion & validation
 │   ├── features.py        # Feature engineering pipeline
-│   ├── train.py           # Model training   
+│   ├── train.py           # Model training & hyperparameter tuning  
 │
 ├── api/
 │   └── main.py            # FastAPI app
@@ -63,7 +62,6 @@ project/
 │
 ├── models/                # Saved models
 ├── mlruns/                # MLflow tracking data
-├── Dockerfile
 ├── requirements.txt
 └── README.md
 ```
@@ -114,7 +112,7 @@ Ensures consistency between training and inference.
 
 ### Advanced
 
-* XGBoost (regression for wait time prediction)
+* XGBoost (Regression for wait time prediction with RandomizedSearchCV tuning)
 
 ---
 
@@ -163,16 +161,6 @@ POST /predict
   "recommended_action": "open_2_lanes"
 }
 ```
-
----
-
-## 🐳 Docker
-
-The entire application is containerized to ensure:
-
-* Environment consistency
-* Easy deployment
-* Portability across systems
 
 ---
 
@@ -229,13 +217,6 @@ python src/train.py
 
 ```
 uvicorn api.main:app --reload
-```
-
-### 4. Run with Docker
-
-```
-docker build -t passenger-flow .
-docker run -p 8000:8000 passenger-flow
 ```
 
 ---
